@@ -1,7 +1,46 @@
 <h3>Equipment</h3>
 <ul>
-    <li>Habitat dome</li>
-    <li>Drones</li>
-    <li>Food containers</li>
-    <li>Oxygen tanks</li>
+    <!-- <li *ngFor='let item of equipment'>{{ item.name }} <span>x{{ item.amount }}</span></li> -->
+    <li  *ngFor='let item of equipment'>
+        <span>
+            <span *ngIf='itemBeingEdited !== item; else editItemBlock' (click)='editItem(item)' class="editable-text">{{ item.name }}</span>
+            <span *ngIf='amountBeingEdited !== item; else editAmountBlock' (click)='editAmount(item)' class="editable-text"> x{{ item.amount }}</span>
+            <button (click)='remove(item)'>Remove</button>
+        </span>
+
+        <ng-template #editItemBlock>
+            <input #updatedItem type="text" (keyup.enter)='saveItem(updatedItem.value, item)' (click)='itemExists=false; itemInvalid=false' value='{{ item.name }}'/>
+            <button (click)='saveItem(updatedItem.value, item)'>Save</button>
+            <button (click)='cancelSave(item); itemExists=false; itemInvalid=false'>Cancel</button>
+        </ng-template>
+
+        <ng-template #editAmountBlock>
+            <label>x<input #updatedAmount (keyup.enter)='saveAmount(updatedAmount.value, item)' (click)='itemExists=false; itemInvalid=false' type='number' min='1' value='{{ item.amount }}'/></label>
+            <button (click)='saveAmount(updatedAmount.value, item)'>Save</button>
+            <button (click)='cancelSave(item); itemExists=false; itemInvalid=false'>Cancel</button>
+        </ng-template>
+
+
+    </li>
+    <!-- <li *ngFor="let member of crew">
+        <span *ngIf='memberBeingEdited !== member; else elseBlock'>   
+           <span (click)='edit(member)' class="editable-text">{{ member.name }}</span>
+           <span *ngIf="member.firstMission">- 1st</span>
+           <button (click)='remove(member)'>Remove</button>
+        </span>
+  
+        <ng-template #elseBlock>
+           <input #updatedName (click)='memberExists=false; memberInvalid=false' (keyup.enter)='save(updatedName.value, member)' value="{{ member.name }}"/>
+           <button (click)='save(updatedName.value, member)'>Save</button>
+           <button (click)='cancelSave(member); memberExists=false; memberInvalid=false'>Cancel</button>
+        </ng-template>
+     </li> -->
 </ul>
+<input #item (click)='itemExists=false; itemInvalid=false;' type='text' placeholder='Equipment to add'/>
+<label>x<input (click)='itemExists=false; itemInvalid=false;' (keyup.enter)='add(item.value, amount.value); item.value=null; amount.value=null' #amount type="number" min="1" placeholder="amount" size="8"/></label>
+<button (click)='add(item.value, amount.value); item.value = null; amount.value=null'>Add</button>
+
+<div class="itemAddError" *ngIf='itemExists || itemInvalid'>
+    <p *ngIf='itemExists'>⛔ That item already exists!</p>
+    <p *ngIf='itemInvalid'>⛔ You cannot add a blank item or quantity!</p>
+ </div>
