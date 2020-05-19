@@ -13,14 +13,26 @@ export class CrewComponent implements OnInit {
   ];
 
   memberBeingEdited: object = null;
-
+  memberExists = false;
+  memberInvalid = false;
   constructor() { }
 
   ngOnInit() {
   }
 
   add(memberName: string, isFirst: boolean) {
-    this.crew.push({name: memberName, firstMission: isFirst});
+    if(this.isValidMember(memberName)) {
+      this.crew.push({name: memberName, firstMission: isFirst});
+    }
+  }
+
+  isValidMember(memberName: string) {
+  if (this.crew.some( member => member['name'].toLowerCase() === memberName.toLowerCase())) {
+      this.memberExists = true;
+    } else if (memberName === '') {
+      this.memberInvalid = true;
+    }
+    return !(this.memberExists || this.memberInvalid);
   }
 
   remove(member: object) {
@@ -33,7 +45,14 @@ export class CrewComponent implements OnInit {
   }
 
   save(name: string, member: object) {
-    member['name'] = name;
+    if(this.isValidMember(name)) {
+      member['name'] = name;
+      this.memberBeingEdited = null;
+    }
+
+  }
+
+  cancelSave(member: object) {
     this.memberBeingEdited = null;
   }
 
