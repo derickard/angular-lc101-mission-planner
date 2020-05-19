@@ -13,4 +13,12 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
   }
 
+  changeMissionName(newName: string) {
+   this.missionName = newName; 
+  }
+
+  changeRocketName(newRocket: string) {
+    this.rocketName = newRocket;
+  }
+
 }
