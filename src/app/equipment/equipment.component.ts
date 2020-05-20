@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+// import { truncate } from 'fs';
 
 @Component({
   selector: 'app-equipment',
@@ -26,14 +27,25 @@ export class EquipmentComponent implements OnInit {
 
    ngOnInit() { }
 
-   addItem(equipment: {name, mass}): boolean{
-     this.cargoHold.push(equipment);
-     this.cargoMass+=equipment.mass;
+   addItem(equipment: {name: string, mass: number}): boolean{
+     if(!this.cargoHold.some(item => item['name'] === equipment.name)) {
+      this.cargoHold.push(equipment);
+      this.cargoMass+=equipment.mass;
+     }
+
      if(this.maximumAllowedMass-this.cargoMass<=200){
        return true;
      }
      return false;
    }
+
+   removeItem(equipment: {name: string, mass: number}) {
+    let index = this.cargoHold.indexOf(equipment);
+    console.log(index);
+    this.cargoHold.splice(index,1);
+    this.cargoMass = this.cargoMass - equipment.mass;
+   }
+
 
    emptyHold(){
      this.cargoMass=0;

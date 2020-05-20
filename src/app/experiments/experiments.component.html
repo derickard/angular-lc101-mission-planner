@@ -1,7 +1,14 @@
 <div class="displayBox">
     <h3>Possible Experiments</h3>
     <ul>
-      <li *ngFor="let experiment of experiments">{{experiment}}</li>
+      <li [class.run]='toConduct.includes(experiment)' (click)='add(experiment)' *ngFor="let experiment of experiments">{{experiment}}</li>
     </ul>
 </div>
 <hr>
+
+<div class="displayBox">
+  <h3>Experiments to Conduct</h3>
+  <ol>
+    <li *ngFor='let experiment of toConduct'>{{experiment}}</li>
+  </ol>
+</div>
